@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.github.javafaker.Faker;
 import data.DataHelper;
+import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -26,7 +27,12 @@ public class LoginPage {
         login.setValue(info.getLogin());
         password.setValue(faker.internet().password());
         button.click();
-        error.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка!"));
+        error.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка!" + "\n" + "Неверно указан логин или пароль" ));
 
+    }
+
+    public void cleanForm(){
+        login.sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
+        password.sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
     }
 }

@@ -18,7 +18,7 @@ public class AppTest {
     }
 
     @Test
-    public void happyPath() {
+    public void happyLoginCase() {
 
         var authInfo = DataHelper.getAuthInfo();
         var login = new LoginPage();
@@ -30,11 +30,20 @@ public class AppTest {
     }
 
     @Test
-    public void wrongPassword() {
+    public void shouldBlockSutInWrongPasswordCase() {
 
         var authInfo = DataHelper.getAuthInfo();
         var login = new LoginPage();
         login.invalidLogin(authInfo);
+        login.cleanForm();
 
+        login.invalidLogin(authInfo);
+        login.cleanForm();
+
+        login.invalidLogin(authInfo);
+        login.cleanForm();
+
+        login.invalidLogin(authInfo);
+        login.cleanForm();
     }
 }
