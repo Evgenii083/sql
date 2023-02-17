@@ -1,11 +1,12 @@
 package page;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.github.javafaker.Faker;
 import data.DataHelper;
 import org.openqa.selenium.Keys;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
@@ -23,16 +24,35 @@ public class LoginPage {
         return new VerificationPage();
     }
 
-    public void invalidLogin(DataHelper.AuthInfo info) {
+
+    public void invalidLogin(DataHelper.InvalidAuthInfo info) {
         login.setValue(info.getLogin());
-        password.setValue(faker.internet().password());
+        password.setValue(info.getPassword());
         button.click();
-        error.shouldBe(Condition.visible).shouldHave(Condition.text("Ошибка!" + "\n" + "Неверно указан логин или пароль" ));
+
 
     }
 
-    public void cleanForm(){
-        login.sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
-        password.sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
+    public void errorNotifications() {
+        error.shouldBe(visible).shouldHave(text("Ошибка!" + "\n" + "Неверно указан логин или пароль"));
+    }
+
+    public void blockedNotifications() {
+        error.shouldBe(visible).shouldHave(text("Система заблокирована"));
+    }
+
+    public void cleanForm() {
+        login.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        password.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+    }
+
+    public void reenter(int repeat) {
+        var authInfo = DataHelper.invalidAuth();
+
+        for (int i = 0; i <= repeat; i++) {
+            cleanForm();
+            invalidLogin(authInfo);
+            errorNotifications();
+        }
     }
 }

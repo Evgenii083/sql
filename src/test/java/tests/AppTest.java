@@ -1,49 +1,47 @@
 package tests;
 
 import data.DataHelper;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import data.Dbutils;
+import org.junit.jupiter.api.*;
 import page.DashboardPage;
 import page.LoginPage;
-import page.VerificationPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
 
 public class AppTest {
+
     @BeforeEach
     public void setUp() {
         open("http://localhost:9999/");
     }
 
-    @Test
-    public void happyLoginCase() {
-
-        var authInfo = DataHelper.getAuthInfo();
-        var login = new LoginPage();
-        login.validLogin(authInfo);
-        var verification = new VerificationPage();
-        verification.verificationCode();
-        var dashboard = new DashboardPage();
-        dashboard.check();
+    @AfterAll
+    static void cleanDb() {
+        Dbutils.clean();
     }
 
     @Test
+    @DisplayName("Should successfully login, password and code")
+    public void happyLoginCase() {
+
+        var login = new LoginPage();
+        var authInfo = DataHelper.validAuth();
+        var verificationPage = login.validLogin(authInfo);
+        verificationPage.verificationCode(Dbutils.getVerificationCode());
+        var dashboard = new DashboardPage();
+        dashboard.check();
+
+    }
+
+    @Test
+    @DisplayName("System should be block after third input with invalid password")
     public void shouldBlockSutInWrongPasswordCase() {
 
-        var authInfo = DataHelper.getAuthInfo();
+        var authInfo = DataHelper.invalidAuth();
         var login = new LoginPage();
         login.invalidLogin(authInfo);
-        login.cleanForm();
-
-        login.invalidLogin(authInfo);
-        login.cleanForm();
-
-        login.invalidLogin(authInfo);
-        login.cleanForm();
-
-        login.invalidLogin(authInfo);
-        login.cleanForm();
+        login.reenter(4);
+        login.blockedNotifications();
     }
 }

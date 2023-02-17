@@ -1,14 +1,14 @@
-DROP TABLE IF EXISTS users;
-CREATE TABLE users
+drop table IF EXISTS users;
+create TABLE users
 (
-    id       CHAR(36) PRIMARY KEY,
+    id       CHAR(36) PRIMARY KEY ,
     login    VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255)        NOT NULL,
     status   VARCHAR(255)        NOT NULL DEFAULT 'active'
 );
 
-DROP TABLE IF EXISTS cards;
-CREATE TABLE cards
+drop table IF EXISTS cards;
+create TABLE cards
 (
     id                 CHAR(36) PRIMARY KEY,
     user_id            CHAR(36)           NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE cards
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-DROP TABLE IF EXISTS auth_codes;
-CREATE TABLE auth_codes
+drop table IF EXISTS auth_codes;
+create TABLE auth_codes
 (
     id      CHAR(36) PRIMARY KEY,
     user_id CHAR(36)   NOT NULL,
@@ -27,8 +27,8 @@ CREATE TABLE auth_codes
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-DROP TABLE IF EXISTS card_transactions;
-CREATE TABLE card_transactions
+drop table IF EXISTS card_transactions;
+create TABLE card_transactions
 (
     id                CHAR(36) PRIMARY KEY,
     source            VARCHAR(19) NOT NULL,
