@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Dbutils {
+    private Dbutils(){
+    }
 
     public static void clean() {
         var runner = new QueryRunner();

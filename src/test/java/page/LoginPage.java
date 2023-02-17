@@ -34,7 +34,7 @@ public class LoginPage {
     }
 
     public void errorNotifications() {
-        error.shouldBe(visible).shouldHave(text("Ошибка!" + "\n" + "Неверно указан логин или пароль"));
+        error.shouldBe(visible).shouldHave(text("Ошибка Ошибка! Неверно указан логин или пароль"));
     }
 
     public void blockedNotifications() {
